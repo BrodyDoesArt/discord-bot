@@ -64,7 +64,7 @@ class Music(commands.Cog):
                 voice = await channel.connect()
 
             if not voice.is_playing():
-                voice.play(discord.FFmpegPCMAudio(self.song_queue[0]['source'], **self.FFMPEG_OPTIONS), after=lambda e: self.play_next(ctx))
+                voice.play(discord.FFmpegPCMAudio(song[0]['source'], **self.FFMPEG_OPTIONS), after=lambda e: self.play_next(ctx))
                 voice.is_playing()
                 await ctx.send(embed=song['embed'], delete_after=song['duration'])
             else:
