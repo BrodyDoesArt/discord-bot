@@ -29,26 +29,31 @@ class Music(commands.Cog):
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(f"ytsearch:{arg}", download=False)['entries'][0]
             
-        embed = (discord.Embed(title='🎵 Musique en cours :', description=f"{info['title']}", color=discord.Color.blue())
-                 .add_field(name='Duration', value=Music.parse_duration(info['duration']))
-                 .add_field(name='Requested by', value=author)
-                 .add_field(name='Uploader', value=f"[{info['uploader']}]({info['channel_url']})")
-                 .add_field(name='URL', value=f"[Lien vers la vidéo]({info['webpage_url']})")
+        embed = (discord.Embed(title='🎵 Musique en cours :', description=f"[{info['title']}]({info['webpage_url']})", color=discord.Color.blue())
+                 .add_field(name='Durée', value=Music.parse_duration(info['duration']))
+                 .add_field(name='Démandée par', value=author)
+                 .add_field(name='Auteur', value=f"[{info['uploader']}]({info['channel_url']})")
+                 .add_field(name="File d'attente", value=f"Pas de musique en attente")
                  .set_thumbnail(url=info['thumbnail']))
         
-        return {'embed': embed, 'source': info['formats'][0]['url'], 'title': info['title'], 'duration': info['duration']}
+        return {'embed': embed, 'source': info['formats'][0]['url'], 'title': info['title']}
 
-    def play_next(self, ctx, message):
+    async def display_message(self, ctx):
+        embed = self.song_queue[0]['embed']
+        content = "\n".join([f"({self.song_queue.index(i)}) {i['title']}" for i in self.song_queue[1:]]) if len(self.song_queue) > 1 else "Pas de musique en attente"
+        embed.set_field_at(index=3, name="File d'attente :", value=content, inline=False)
+        await self.message.edit(embed=embed)
+
+    def play_next(self, ctx):
         voice = get(self.bot.voice_clients, guild=ctx.guild)
         if len(self.song_queue) > 1:
-            asyncio.run_coroutine_threadsafe(self.song_queue[0]['queue_message'].delete(), self.bot.loop)
             del self.song_queue[0]
-            asyncio.run_coroutine_threadsafe(message.edit(embed=self.song_queue[0]['embed']), self.bot.loop)
-            voice.play(discord.FFmpegPCMAudio(self.song_queue[0]['source'], **self.FFMPEG_OPTIONS), after=lambda e: self.play_next(ctx, message))
+            asyncio.run_coroutine_threadsafe(self.display_message(ctx), self.bot.loop)
+            voice.play(discord.FFmpegPCMAudio(self.song_queue[0]['source'], **self.FFMPEG_OPTIONS), after=lambda e: self.play_next(ctx))
             voice.is_playing()
         else:
             asyncio.run_coroutine_threadsafe(voice.disconnect(), self.bot.loop)
-            asyncio.run_coroutine_threadsafe(message.delete(), self.bot.loop)
+            asyncio.run_coroutine_threadsafe(self.message.delete(), self.bot.loop)
 
     @commands.command(aliases=['p'], brief='!play [url/key-words]', description='Plays youtube videos')
     async def play(self, ctx, *arg):
@@ -66,31 +71,13 @@ class Music(commands.Cog):
                 voice = await channel.connect()
 
             if not voice.is_playing():
-                message = await ctx.send(embed=song['embed'])
-                voice.play(discord.FFmpegPCMAudio(song['source'], **self.FFMPEG_OPTIONS), after=lambda e: self.play_next(ctx, message))
+                self.message = await ctx.send(embed=song['embed'])
+                voice.play(discord.FFmpegPCMAudio(song['source'], **self.FFMPEG_OPTIONS), after=lambda e: self.play_next(ctx))
                 voice.is_playing()
-                
             else:
-                self.song_queue[0]['queue_message'] = await ctx.send(f":white_check_mark: Musique **{song['title']}** added to queue.")
+                await self.display_message(ctx)
         else:
             await ctx.send("❌ Tu n'es connecté à aucun channel !", delete_after = 5.0)
-
-    @commands.command(aliases=['q'], brief="!queue", description="Affiche la file d'attente")
-    async def queue(self, ctx):
-        channel = ctx.message.author.voice.channel
-        await ctx.channel.purge(limit=1)
-        voice = get(self.bot.voice_clients, guild=ctx.guild)
-        embed = discord.Embed(color=discord.Color.blue(), title="⏱️ Queue:")
-        if voice and voice.is_playing():
-            for i in self.song_queue:
-                if self.song_queue.index(i) == 0:
-                    embed.add_field(name=f'**🔴 Now playing:**', value=f"{i['title']}", inline=False)
-                else:
-                    embed.add_field(
-                        name=f'**🎵 Track n°{self.song_queue.index(i)} :**', value=f"{i['title']}", inline=False)
-            await ctx.send(embed=embed)
-        else:
-            await ctx.send("❌ I'm not playing anything!", delete_after = 5.0)
 
     @commands.command(brief='!pause', description='Pauses or resumes the current song')
     async def pause(self, ctx):
@@ -117,6 +104,13 @@ class Music(commands.Cog):
             voice.stop()
         else:
             await ctx.send("❌ I'm not playing anything!", delete_after = 5.0)
+
+   @commands.command(brief='!remove [vidéo]', description="Enlève la musique de la file d'attente")
+    async def remove(self, ctx, arg):
+        for video in self.song_queue:
+            if arg.lower() in video['title'].lower():
+                self.song_queue.remove(video)
+        await self.display_message(ctx)
 
 def setup(bot):
     bot.add_cog(Music(bot))
