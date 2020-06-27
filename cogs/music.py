@@ -33,14 +33,14 @@ class Music(commands.Cog):
                  .add_field(name='Durée', value=Music.parse_duration(info['duration']))
                  .add_field(name='Démandée par', value=author)
                  .add_field(name='Auteur', value=f"[{info['uploader']}]({info['channel_url']})")
-                 .add_field(name="File d'attente", value=f"Pas de musique en attente")
+                 .add_field(name="File d'attente", value=f"No music in queue")
                  .set_thumbnail(url=info['thumbnail']))
         
         return {'embed': embed, 'source': info['formats'][0]['url'], 'title': info['title']}
 
     async def display_message(self, ctx):
         embed = self.song_queue[0]['embed']
-        content = "\n".join([f"({self.song_queue.index(i)}) {i['title']}" for i in self.song_queue[1:]]) if len(self.song_queue) > 1 else "Pas de musique en attente"
+        content = "\n".join([f"({self.song_queue.index(i)}) {i['title']}" for i in self.song_queue[1:]]) if len(self.song_queue) > 1 else "No music in queue"
         embed.set_field_at(index=3, name="File d'attente :", value=content, inline=False)
         await self.message.edit(embed=embed)
 
@@ -105,7 +105,7 @@ class Music(commands.Cog):
         else:
             await ctx.send("❌ I'm not playing anything!", delete_after = 5.0)
 
-   @commands.command(brief='!remove [vidéo]', description="Enlève la musique de la file d'attente")
+   @commands.command(brief='!remove [vidéo]', description="Removes the video from the queue")
     async def remove(self, ctx, arg):
         for video in self.song_queue:
             if arg.lower() in video['title'].lower():
