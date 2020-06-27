@@ -38,15 +38,17 @@ class Music(commands.Cog):
         
         return {'embed': embed, 'source': info['formats'][0]['url'], 'title': info['title'], 'duration': info['duration']}
 
-    def play_next(self, ctx):
+    def play_next(self, ctx, message):
         voice = get(self.bot.voice_clients, guild=ctx.guild)
         if len(self.song_queue) > 1:
+            asyncio.run_coroutine_threadsafe(self.song_queue[0]['queue_message'].delete(), self.bot.loop)
             del self.song_queue[0]
-            voice.play(discord.FFmpegPCMAudio(self.song_queue[0]['source'], **self.FFMPEG_OPTIONS), after=lambda e: self.play_next(ctx))
+            asyncio.run_coroutine_threadsafe(message.edit(embed=self.song_queue[0]['embed']), self.bot.loop)
+            voice.play(discord.FFmpegPCMAudio(self.song_queue[0]['source'], **self.FFMPEG_OPTIONS), after=lambda e: self.play_next(ctx, message))
             voice.is_playing()
-            asyncio.run_coroutine_threadsafe(ctx.send(embed=self.song_queue[0]['embed'], delete_after=self.song_queue[0]['duration']), self.bot.loop)
         else:
             asyncio.run_coroutine_threadsafe(voice.disconnect(), self.bot.loop)
+            asyncio.run_coroutine_threadsafe(message.delete(), self.bot.loop)
 
     @commands.command(aliases=['p'], brief='!play [url/key-words]', description='Plays youtube videos')
     async def play(self, ctx, *arg):
@@ -64,11 +66,12 @@ class Music(commands.Cog):
                 voice = await channel.connect()
 
             if not voice.is_playing():
-                voice.play(discord.FFmpegPCMAudio(song[0]['source'], **self.FFMPEG_OPTIONS), after=lambda e: self.play_next(ctx))
+                message = await ctx.send(embed=song['embed'])
+                voice.play(discord.FFmpegPCMAudio(song['source'], **self.FFMPEG_OPTIONS), after=lambda e: self.play_next(ctx, message))
                 voice.is_playing()
-                await ctx.send(embed=song['embed'], delete_after=song['duration'])
+                
             else:
-                await ctx.send(f":white_check_mark: Musique **{song['title']}** added to queue ({len(self.song_queue)-1} to go)", delete_after = self.song_queue[0]['duration'])
+                self.song_queue[0]['queue_message'] = await ctx.send(f":white_check_mark: Musique **{song['title']}** added to queue.")
         else:
             await ctx.send("❌ Tu n'es connecté à aucun channel !", delete_after = 5.0)
 
@@ -85,7 +88,7 @@ class Music(commands.Cog):
                 else:
                     embed.add_field(
                         name=f'**🎵 Track n°{self.song_queue.index(i)} :**', value=f"{i['title']}", inline=False)
-            await ctx.send(embed=embed, delete_after = self.song_queue[0]['duration'])
+            await ctx.send(embed=embed)
         else:
             await ctx.send("❌ I'm not playing anything!", delete_after = 5.0)
 
