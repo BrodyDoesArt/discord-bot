@@ -19,3 +19,4 @@
 !remove [video] → removes the video from the queue<br>
 
 PS : !clear can now be only used in channels nammed "bot" (Optionnal, you can change this by deleting lines 16, 18 and 19 in chat.py)
+It's able to play music on multiple servers at the same time
