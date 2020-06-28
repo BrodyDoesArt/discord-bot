@@ -14,7 +14,6 @@ This bot includes :
 - discord.py → 1.3.3
 - youtube-dl → 2020.5.8
 - async-timeout → 3.0.1
-- requests → 2.23.0
 - lxml → 4.5.1
 - PyNaCl → 1.3.0
 - wheel → 0.34.2
