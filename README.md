@@ -6,7 +6,7 @@ This bot was made with python (3.8.0) and discord.py@rewrite. It includes:
 # About the music module
 This bot includes :
 - A youtube videos support (even ones from public playlists)
-- A queue system (queue songs, remove songs from queue)
+- A queue system (per server queue, add and remove songs from queue)
 - A youtube search system (search from links or key-words)
 - A pretty message system (automatic current song display and deletion)
 
