@@ -6,7 +6,8 @@ initial_extensions = [
     'cogs.music',
     'cogs.chat',
     'cogs.JDR',
-    'cogs.random'
+    'cogs.random',
+    'cogs.level'
 ]
 
 if __name__ == '__main__':
