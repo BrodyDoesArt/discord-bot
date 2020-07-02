@@ -8,7 +8,7 @@ class random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(brief='!hod [head/tail]', description='Toss a coin')
+    @commands.command(brief='!hod [head/tail]')
     async def hod(self, ctx, arg):
         if arg.lower() == 'head' or arg.lower() == 'tail':
             piece = choice(['HEAD', 'TAIL'])
@@ -19,7 +19,7 @@ class random(commands.Cog):
         else:
             await ctx.send('❌ You must input either "head" or "tail"!')         
 
-    @commands.command(brief='!poke [random/pseudo]', description='Mention a member (randomly or not)')
+    @commands.command(brief='!poke [random/pseudo]')
     async def poke(self, ctx, arg):
         members = [x for x in ctx.guild.members if not x.bot]
         if arg.lower() == 'random':
