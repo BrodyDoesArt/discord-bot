@@ -8,10 +8,10 @@ class random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(brief='!pof [pile/face]', description='Toss a coin')
-    async def pof(self, ctx, arg):
+    @commands.command(brief='!hod [head/tail]', description='Toss a coin')
+    async def hod(self, ctx, arg):
         if arg.lower() == 'head' or arg.lower() == 'tail':
-            piece = choice(['PILE', 'FACE'])
+            piece = choice(['HEAD', 'TAIL'])
             if arg.lower() in piece:
                 await ctx.send(f':white_check_mark: {piece}! You won.')
             else:
