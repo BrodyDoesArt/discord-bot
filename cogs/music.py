@@ -26,7 +26,7 @@ class Music(commands.Cog, name='Musique'):
         with YoutubeDL(Music.YDL_OPTIONS) as ydl:
             info = ydl.extract_info(f"ytsearch:{arg}", download=False)['entries'][0]
 
-            embed = (discord.Embed(title='🎵 Musique en cours :', description=f"[{info['title']}]({info['webpage_url']})", color=discord.Color.blue())
+            embed = (discord.Embed(title='🎵 Now playing :', description=f"[{info['title']}]({info['webpage_url']})", color=discord.Color.blue())
                     .add_field(name='Duration', value=Music.parse_duration(info['duration']))
                     .add_field(name='Requested by', value=author)
                     .add_field(name='Uploader', value=f"[{info['uploader']}]({info['channel_url']})")
@@ -52,7 +52,7 @@ class Music(commands.Cog, name='Musique'):
             run_coroutine_threadsafe(voice.disconnect(), self.bot.loop)
             run_coroutine_threadsafe(self.message[ctx.guild].delete(), self.bot.loop)
 
-    @commands.command(aliases=['p'], brief='!play [url/words]', description='Plays the requested video')
+    @commands.command(aliases=['p'], brief='!play [url/words]')
     async def play(self, ctx, *, arg):
         await ctx.channel.purge(limit=1)
         try: channel = ctx.author.voice.channel
@@ -76,7 +76,7 @@ class Music(commands.Cog, name='Musique'):
                 self.song_queue[ctx.guild].append(song)
                 await self.edit_message(ctx)
 
-    @commands.command(brief='!pause', description='Pauses or resumes the video')
+    @commands.command(brief='!pause')
     async def pause(self, ctx):
         voice = get(self.bot.voice_clients, guild=ctx.guild)
         await ctx.channel.purge(limit=1)
@@ -90,7 +90,7 @@ class Music(commands.Cog, name='Musique'):
         else:
             await ctx.send("❌ I'm not connected to any channel!", delete_after = 5.0)
 
-    @commands.command(aliases=['pass'], brief='!skip', description='Skips the current video')
+    @commands.command(aliases=['pass'], brief='!skip')
     async def skip(self, ctx):
         voice = get(self.bot.voice_clients, guild=ctx.guild)
         channel = ctx.message.author.voice.channel
@@ -101,7 +101,7 @@ class Music(commands.Cog, name='Musique'):
         else:
             await ctx.send("❌ I'm not playing any songs!", delete_after = 5.0)
 
-    @commands.command(brief='!remove [video]', description="Removes the video from queue")
+    @commands.command(brief='!remove [video]')
     async def remove(self, ctx, *, arg):
         await ctx.channel.purge(limit=1)
         voice = get(self.bot.voice_clients, guild=ctx.guild)
