@@ -5,7 +5,7 @@ bot = commands.Bot(command_prefix='!')
 initial_extensions = [
     'cogs.music',
     'cogs.chat',
-    'cogs.JDR',
+    'cogs.RPG',
     'cogs.random',
     'cogs.level'
 ]
