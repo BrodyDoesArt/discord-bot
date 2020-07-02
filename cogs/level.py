@@ -44,7 +44,7 @@ class Leveling(commands.Cog, name='Niveaux'):
                 await message.channel.send(f"🎉 {message.author.mention} leveled up! He's now lvl {member['level']}")
         self.set_data(members)
 
-    @commands.command(brief='!xp', description='Afficher son niveau et son xp', aliases=['level', 'lvl', 'niveau', 'niv'])
+    @commands.command(brief='!xp', aliases=['level', 'lvl', 'niveau', 'niv'])
     async def xp(self, ctx):
         members = self.get_data()
         for member in members:
