@@ -24,16 +24,18 @@ class Music(commands.Cog, name='Musique'):
     @staticmethod
     def search(author, arg):
         with YoutubeDL(Music.YDL_OPTIONS) as ydl:
-            info = ydl.extract_info(f"ytsearch:{arg}", download=False)['entries'][0]
+            try: requests.get(arg)
+            except: info = ydl.extract_info(f"ytsearch:{arg}", download=False)['entries'][0]
+            else: info = ydl.extract_info(arg, download=False)
 
-            embed = (discord.Embed(title='🎵 Now playing :', description=f"[{info['title']}]({info['webpage_url']})", color=discord.Color.blue())
-                    .add_field(name='Duration', value=Music.parse_duration(info['duration']))
-                    .add_field(name='Requested by', value=author)
-                    .add_field(name='Uploader', value=f"[{info['uploader']}]({info['channel_url']})")
-                    .add_field(name="Queue", value=f"Empty queue")
-                    .set_thumbnail(url=info['thumbnail']))
+        embed = (discord.Embed(title='🎵 Now playing :', description=f"[{info['title']}]({info['webpage_url']})", color=discord.Color.blue())
+                .add_field(name='Duration', value=Music.parse_duration(info['duration']))
+                .add_field(name='Requested by', value=author)
+                .add_field(name='Uploader', value=f"[{info['uploader']}]({info['channel_url']})")
+                .add_field(name="Queue", value=f"Empty queue")
+                .set_thumbnail(url=info['thumbnail']))
             
-            return {'embed': embed, 'source': info['formats'][0]['url'], 'title': info['title']}
+       return {'embed': embed, 'source': info['formats'][0]['url'], 'title': info['title']}
 
     async def edit_message(self, ctx):
         embed = self.song_queue[ctx.guild][0]['embed']
