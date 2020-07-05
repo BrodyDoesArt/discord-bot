@@ -3,3 +3,4 @@ wheel
 ffmpeg
 youtube_dl
 PyNaCl
+requests
