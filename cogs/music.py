@@ -111,7 +111,7 @@ class Music(commands.Cog, name='Musique'):
             for video in self.song_queue[ctx.guild][1:]:
                 if arg.lower() in video['title'].lower():
                     self.song_queue[ctx.guild].remove(video)
-            await self.display_message(ctx)
+            await self.edit_message(ctx)
         else:
             await ctx.send("❌ I'm not playing any songs!")
 
