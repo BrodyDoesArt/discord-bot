@@ -19,3 +19,6 @@
 
 - Experience system:<br>
 !xp → shows your level and xp
+
+- Error management system:
+If there's any error while running a command, the error message will be sent in chat
