@@ -8,6 +8,7 @@ initial_extensions = [
     'cogs.RPG',
     'cogs.random',
     'cogs.level'
+    'cogs.errors'
 ]
 
 if __name__ == '__main__':
