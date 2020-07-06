@@ -6,7 +6,7 @@ from youtube_dl import YoutubeDL
 from asyncio import run_coroutine_threadsafe
 import requests
 
-class Music(commands.Cog, name='Musique'):
+class Music(commands.Cog):
     YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True'}
     FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
@@ -30,17 +30,17 @@ class Music(commands.Cog, name='Musique'):
             else: info = ydl.extract_info(arg, download=False)
 
         embed = (discord.Embed(title='🎵 Musique en cours :', description=f"[{info['title']}]({info['webpage_url']})", color=discord.Color.blue())
-                .add_field(name='Durée', value=Music.parse_duration(info['duration']))
-                .add_field(name='Démandée par', value=author)
-                .add_field(name='Auteur', value=f"[{info['uploader']}]({info['channel_url']})")
-                .add_field(name="File d'attente", value=f"Pas de musique en attente")
+                .add_field(name='Duration', value=Music.parse_duration(info['duration']))
+                .add_field(name='Requested by', value=author)
+                .add_field(name='Uploader', value=f"[{info['uploader']}]({info['channel_url']})")
+                .add_field(name="Queue", value=f"No queue")
                 .set_thumbnail(url=info['thumbnail']))
             
         return {'embed': embed, 'source': info['formats'][0]['url'], 'title': info['title']}
 
     async def edit_message(self, ctx):
         embed = self.song_queue[ctx.guild][0]['embed']
-        content = "\n".join([f"({self.song_queue[ctx.guild].index(i)}) {i['title']}" for i in self.song_queue[ctx.guild][1:]]) if len(self.song_queue[ctx.guild]) > 1 else "Pas de musique en attente"
+        content = "\n".join([f"({self.song_queue[ctx.guild].index(i)}) {i['title']}" for i in self.song_queue[ctx.guild][1:]]) if len(self.song_queue[ctx.guild]) > 1 else "No queue"
         embed.set_field_at(index=3, name="File d'attente :", value=content, inline=False)
         await self.message[ctx.guild].edit(embed=embed)
 
