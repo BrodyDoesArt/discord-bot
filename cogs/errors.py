@@ -8,7 +8,7 @@ class ErrorManager(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         msg = error; msg[0].upper
-        embed = discord.Embed(title="**❌ Une erreur s'est produite :**", description=msg, color=discord.Color.red())
+        embed = discord.Embed(title="❌ Oops", description=msg, color=discord.Color.red())
         await ctx.channel.purge(limit=1)
         await ctx.send(embed=embed, delete_after=10.0)
 
