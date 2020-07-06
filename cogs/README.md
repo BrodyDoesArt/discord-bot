@@ -2,7 +2,7 @@
 
 - Chat:<br>
 !clear [x] → clears the [x] previous messages<br>
-!help [category/blank] → shows an help message<br>
+!help → shows an help message<br>
 
 - RPG:<br>
 !roll [x] → simulates a dice roll<br>
