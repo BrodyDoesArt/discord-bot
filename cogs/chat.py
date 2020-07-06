@@ -7,14 +7,10 @@ class chat(commands.Cog):
         self.bot = bot
 
     @commands.command(brief='!clear [x]', aliases=['delete', 'purge'])
+    @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, limit):
-        try:
-            float(limit)
-        except:
-            await ctx.send('❌ Input must be an integer!')
-        else:
-            limit = int(limit) + 1
-            await ctx.channel.purge(limit=limit)
+        limit = int(limit) + 1
+        await ctx.channel.purge(limit=limit)
     
     @commands.command(brief='!help')
     async def help(self, ctx):
