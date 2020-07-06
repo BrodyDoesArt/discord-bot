@@ -15,13 +15,14 @@ class chat(commands.Cog):
     @commands.command(brief='!help')
     async def help(self, ctx):
         await ctx.channel.purge(limit=1)
-        embed = discord.Embed(color=discord.Color.blue(), title='Commands list:')
+        embed = discord.Embed(color=discord.Color.blue(), title='Listes des commandes')
         for cog in self.bot.cogs:
-            temp = []
-            for cmd in self.bot.get_cog(cog).get_commands():
-                if not cmd.hidden:
-                    temp.append(f"{cmd.brief}\n")
-            embed.add_field(name=f'**{cog} :**', value=f"{''.join(temp)}", inline=False)
+            if self.bot.get_cog(cog).get_commands():
+                temp = []
+                for cmd in self.bot.get_cog(cog).get_commands():
+                    if not cmd.hidden:
+                        temp.append(f"{cmd.brief}\n")
+                embed.add_field(name=f'**{cog} :**', value=f"{''.join(temp)}", inline=False)
         await ctx.send(embed=embed)
 
                                 
