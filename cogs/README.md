@@ -9,7 +9,7 @@
 
 - Random:<br>
 !toss [head/tail] → makes a coin toss against the bot<br>
-!poke [random/nickname] → mentions an online member (randomly or not)<br>
+!poke [random/name] → mentions an online member (randomly or not)<br>
 
 - Music (per server queue):<br>
 !play [url/words] → plays the correponding music<br>
