@@ -17,6 +17,3 @@
 !pause → pauses or resumes the song<br>
 !skip → skips the song<br>
 !remove [video] → removes the video from the queue<br>
-
-- Experience system:<br>
-!xp → shows your xp
