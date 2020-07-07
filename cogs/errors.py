@@ -13,11 +13,14 @@ class ErrorManager(commands.Cog):
             msg = f'You must input these following arguments: {error.param.name}'
         elif isinstance(error, commands.CommandNotFound):
             msg = 'Unknown command!'
-        elif isinstance(error, commands.CommandInvokeError):
+        elif isinstance(error, commands.CommandInvokeError) and ('index' in str(error) or 'NoneType' in str(error))::
             if 'index' in str(error):
                 msg = "Argument is too big!"
             elif 'NoneType' in str(error):
                 msg = "I'm not connected to any channel!" if 'is_playing' in str(error) else "You're not connected to any channel!"
+        else:
+            print(error)
+            return
 
         embed = discord.Embed(title="❌ Oops :", description=msg, color=discord.Color.red())
         await ctx.channel.purge(limit=1)
