@@ -1,6 +1,6 @@
 # Simple discord music discord bot
 This bot was made with python (3.8.0) and discord.py@rewrite. It includes:
-- Chat commands (!poke, !clear, !roll, !toss, !help)
+- Chat commands (!poke, !clear, !roll, !toss, !help, !poll)
 - Music commands (!join, !skip, !pause, !play, !remove)
 
 # About the music module
