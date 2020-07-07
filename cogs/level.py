@@ -23,13 +23,13 @@ class Leveling(commands.Cog, name='Niveaux'):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        members = self.get_data(str(message.guild.id))
+        members = self.get_data(str(member.guild.id)))
         members.append({'name': member.name, 'id': member.id, 'level': 0,'xp': 0})
         self.set_data(members)
     
     @commands.Cog.listener()
     async def on_member_remove(self, member):
-        members = self.get_data(str(message.guild.id))
+        members = self.get_data(str(member.guild.id)))
         members.remove({'name': member.name, 'id': member.id, 'level': member.level,'xp': member.xp})
         self.set_data(members)
 
