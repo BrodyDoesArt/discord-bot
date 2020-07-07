@@ -3,6 +3,7 @@
 - Chat:<br>
 !clear [x] → clears the [x] previous messages<br>
 !help → shows an help message<br>
+!poll [question] [answers] → create a new poll<br>
 
 - RPG:<br>
 !roll [x] → simulates a dice roll<br>
