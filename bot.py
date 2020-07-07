@@ -7,7 +7,6 @@ initial_extensions = [
     'cogs.chat',
     'cogs.RPG',
     'cogs.random',
-    'cogs.level'
     'cogs.errors'
 ]
 
