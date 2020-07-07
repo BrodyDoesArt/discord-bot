@@ -18,4 +18,4 @@
 !remove [video] → removes the video from the queue<br>
 
 - Experience system:<br>
-!xp → shows your level and xp
+!xp → shows your xp
