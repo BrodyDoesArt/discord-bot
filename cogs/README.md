@@ -13,7 +13,7 @@
 !poke [random/name] → mentions an online member (randomly or not)<br>
 
 - Music (per server queue):<br>
-!play [url/words] → plays the correponding music<br>
-!pause → pauses or resumes the song<br>
-!skip → skips the song<br>
+!play [url/words] → plays the correponding video<br>
+!pause → pauses or resumes the video<br>
+!skip → skips the video<br>
 !remove [video] → removes the video from the queue<br>
