@@ -25,6 +25,19 @@ class chat(commands.Cog):
                 embed.add_field(name=f'**{cog} :**', value=f"{''.join(temp)}", inline=False)
         await ctx.send(embed=embed)
 
+    @commands.command(brief='!poll [question] [answers]')
+    async def poll(self, ctx, *items):
+        question = items[0]
+        answers = '\n'.join(items[1:])
+        embed = discord.Embed(title='Nouveaux sondage :', description=f":grey_question: __{question}__", color=discord.Colour.blue())
+        for i in range(1, len(items)):
+            embed.add_field(name=f"Option n°{i}", value=items[i], inline=False)
+        await ctx.channel.purge(limit=1)
+        message = await ctx.channel.send(embed=embed)
+        reactions = ['1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣']
+
+        for i in range(len(items[1:])):
+            await message.add_reaction(reactions[i])
                                 
 def setup(bot):
     bot.add_cog(chat(bot))
