@@ -11,9 +11,10 @@ class Leveling(commands.Cog, name='Niveaux'):
         self.factor = 2
 
     @staticmethod
-    def get_data():
+    def get_data(guild, reset=False):
         with open('members.json', 'r') as file:
-            return loads(file.read())
+            guild_info = loads(file.read())
+            return guild_info[guild] if not reset else guild_info
 
     @staticmethod
     def set_data(members):
@@ -22,20 +23,20 @@ class Leveling(commands.Cog, name='Niveaux'):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        members = self.get_data()
+        members = self.get_data(str(message.guild.id))
         members.append({'name': member.name, 'id': member.id, 'level': 0,'xp': 0})
         self.set_data(members)
     
     @commands.Cog.listener()
     async def on_member_remove(self, member):
-        members = self.get_data()
+        members = self.get_data(str(message.guild.id))
         members.remove({'name': member.name, 'id': member.id, 'level': member.level,'xp': member.xp})
         self.set_data(members)
 
     @commands.Cog.listener()
     async def on_message(self, message):
         author = message.author.id
-        members = self.get_data()
+        members = self.get_data(str(message.guild.id))
         for member in members:
             if author == member['id']:
                 member['xp'] += randint(5, 10)
@@ -44,6 +45,15 @@ class Leveling(commands.Cog, name='Niveaux'):
                 await message.channel.send(f"🎉 {message.author.mention} leveled up! He's now lvl {member['level']}")
         self.set_data(members)
 
+    @commands.command()
+    async def reset(self, ctx):
+        data = self.get_data(str(ctx.guild.id), True)
+        data[ctx.guild.id] = []
+        if ctx.author.name == 'Mr_Spaar':
+            for member in ctx.guild.members:
+                data[ctx.guild.id].append({'name': member.name, 'id': member.id, 'level': 0,'xp': 0})
+        self.set_data(data)
+                                           
     @commands.command(brief='!xp', aliases=['level', 'lvl', 'niveau', 'niv'])
     async def xp(self, ctx):
         members = self.get_data()
