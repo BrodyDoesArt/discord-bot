@@ -13,6 +13,11 @@ class ErrorManager(commands.Cog):
             msg = f'You must input these following arguments: {error.param.name}'
         elif isinstance(error, commands.CommandNotFound):
             msg = 'Unknown command!'
+        elif isinstance(error, commands.MissingPermissions):
+            msg = "You're not allowed to use this command!"
+        elif isinstance(error, commands.BotMissingPermissions):
+            perms = ", ".join(error.missing_perms)
+            msg = f"I'm missing permissions to execute this command: {perms} !"
         elif isinstance(error, commands.CommandInvokeError) and ('index' in str(error) or 'NoneType' in str(error))::
             if 'index' in str(error):
                 msg = "Argument is too big!"
