@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 
+from datetime import datetime
+
 class ErrorManager(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -35,9 +37,10 @@ class ErrorManager(commands.Cog):
         async def on_command_completion(self, ctx):
             for channel in ctx.guild.text_channels:
                 if channel.name == "logs":
-                    args = ctx.message.content[(len(ctx.command.name)+1):]
-                    command = f"{ctx.author.mention}: !{ctx.command.name}{args}"
+                    command = f"{ctx.author.mention}: !{ctx.command.name}{ctx.message.content[(len(ctx.command.name)+1):]}"
+                    now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
                     embed = discord.Embed(title=':pager: Commande exécutée :', description=command, color=0x3498db)
+                    embed.add_field(name='\u200b', value=now)
                     await channel.send(embed=embed)
         
 def setup(bot):
