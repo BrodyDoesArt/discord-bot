@@ -3,9 +3,23 @@ from discord.ext import commands
 
 from datetime import datetime
 
-class ErrorManager(commands.Cog):
+class Logger(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.command(hidden=True)
+    async def log(self, ctx):
+        await ctx.channel.purge(limit=1)
+        try:
+            if self.guilds[ctx.guild]:
+                self.guilds[ctx.guild] = False
+                await ctx.send("Les logs sont désactivés", delete_after=5.0)
+            else:
+                self.guilds[ctx.guild] = True
+                await ctx.send("Les logs sont activés", delete_after=5.0)
+        except:
+            self.guilds[ctx.guild] = True
+            await ctx.send("Les logs sont activés", delete_after=5.0)
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
@@ -36,12 +50,15 @@ class ErrorManager(commands.Cog):
         @commands.Cog.listener()
         async def on_command_completion(self, ctx):
             for channel in ctx.guild.text_channels:
-                if channel.name == "logs":
-                    command = f"{ctx.author.mention}: !{ctx.command.name}{ctx.message.content[(len(ctx.command.name)+1):]}"
-                    now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-                    embed = discord.Embed(title=':pager: Commande exécutée :', description=command, color=0x3498db)
-                    embed.add_field(name='\u200b', value=now)
-                    await channel.send(embed=embed)
+                try:
+                    if channel.name == "logs" and self.guilds[ctx.guild]:
+                        command = f"{ctx.author.mention}: !{ctx.command.name}{ctx.message.content[(len(ctx.command.name)+1):]}"
+                        now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                        embed = discord.Embed(title=':pager: Command executed:', description=command, color=0x3498db)
+                        embed.add_field(name='\u200b', value=now)
+                        await channel.send(embed=embed)
+                except:
+                    pass
         
 def setup(bot):
-    bot.add_cog(ErrorManager(bot))
+    bot.add_cog(Logger(bot))
