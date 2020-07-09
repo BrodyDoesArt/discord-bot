@@ -7,7 +7,7 @@ initial_extensions = [
     'cogs.chat',
     'cogs.RPG',
     'cogs.random',
-    'cogs.errors'
+    'cogs.logs'
 ]
 
 if __name__ == '__main__':
