@@ -17,7 +17,7 @@
 !play [url/words] → plays the correponding video<br>
 !pause → pauses or resumes the video<br>
 !skip → skips the video<br>
-!remove [video] → removes the video from the queue<br>
+!remove [queue pos] → removes the video from the queue<br>
 
 - Log system:<br>
 Will send which user has sent which command in a channel nammed "logs"<br>
