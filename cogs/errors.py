@@ -31,5 +31,14 @@ class ErrorManager(commands.Cog):
         await ctx.channel.purge(limit=1)
         await ctx.send(embed=embed, delete_after=5.0)
 
+        @commands.Cog.listener()
+        async def on_command_completion(self, ctx):
+            for channel in ctx.guild.text_channels:
+                if channel.name == "logs":
+                    args = ctx.message.content[(len(ctx.command.name)+1):]
+                    command = f"{ctx.author.mention}: !{ctx.command.name}{args}"
+                    embed = discord.Embed(title=':pager: Commande exécutée :', description=command, color=0x3498db)
+                    await channel.send(embed=embed)
+        
 def setup(bot):
     bot.add_cog(ErrorManager(bot))
