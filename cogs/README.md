@@ -20,4 +20,4 @@
 
 - Log system:<br>
 Will send which user has sent which command in a channel nammed "logs"<br>
-Will also send an error message when a command fails<br>
+Will also send an error message when a command fails
