@@ -4,6 +4,7 @@
 !clear [x] → clears the [x] previous messages<br>
 !help → shows an help message<br>
 !poll [question] [answers] → create a poll<br>
+!meme → sends a random meme
 
 - RPG:<br>
 !roll [x] → simulates a dice roll<br>
