@@ -18,6 +18,6 @@
 !skip → skips the video<br>
 !remove [video] → removes the video from the queue<br>
 
-- Log system:
-Will send which user has sent which command in a channel nammed "logs"
-Will also send an error message when a command fails
+- Log system:<br>
+Will send which user has sent which command in a channel nammed "logs"<br>
+Will also send an error message when a command fails<br>
