@@ -11,12 +11,14 @@ This bot includes :
 - A pretty message system (automatic current song display and deletion)
 
 # Libraries' version:
-- discord.py → 1.3.3
-- youtube-dl → 2020.5.8
+- discord.py → 1.3.4
+- discord → 1.0.1
+- youtube-dl → 2020.6.16.1
 - async-timeout → 3.0.1
 - lxml → 4.5.1
-- PyNaCl → 1.3.0
+- PyNaCl → 1.4.0
 - wheel → 0.34.2
+- websockets → 8.1
 - FFmpeg → 4.2.3
 
 Add FFmpeg to path when you download it (https://www.youtube.com/watch?v=a_KqycyErd8).
