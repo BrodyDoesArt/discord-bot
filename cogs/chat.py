@@ -39,7 +39,7 @@ class chat(commands.Cog):
         for i in range(len(items[1:])):
             await message.add_reaction(reactions[i])
 
-    @commands.command()
+    @commands.command(brief='!meme')
     async def meme(self, ctx):
         data = get('https://meme-api.herokuapp.com/gimme').json()
         embed = (discord.Embed(title=f":speech_balloon: r/{data['subreddit']} :", color=0x3498db)
