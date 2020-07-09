@@ -20,5 +20,6 @@
 !remove [queue pos] → removes the video from the queue<br>
 
 - Log system:<br>
-Will send which user has sent which command in a channel nammed "logs"<br>
-Will also send an error message when a command fails
+!log : enable or disables logs in your server (disabled by default)
+
+NB : if you want logs, you must have a "logs" text channel!
